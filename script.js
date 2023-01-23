@@ -331,8 +331,7 @@ btnTransfer.addEventListener("click", function (e) {
       cleanInputs(inputTransferAmount, inputTransferTo);
       highlightLastMove(300);
 
-      // btnModalAccept.removeEventListener('click', confOp);
-      modalWinClose();
+      modalWinClose("close");
     };
     const message = `You are going to transfer ${
       transfer + activeUser.currency.sign
@@ -340,7 +339,7 @@ btnTransfer.addEventListener("click", function (e) {
       transferExc + transferTo.currency.sign
     }`;
 
-    modalWin("conf", message);
+    modalWin("conf", message, confOp);
     modalWinClose(confOp);
 
     btnModalAccept.addEventListener("click", confOp);
@@ -349,12 +348,12 @@ btnTransfer.addEventListener("click", function (e) {
       modalWin("err", "You must enter your Reciever Username");
       return;
     }
-    if (!inputTransferAmount.value) {
-      modalWin("err", "You must enter amount for the transaction");
-      return;
-    }
     if (!transferTo) {
       modalWin("err", `Account ${inputTransferTo.value} not found`);
+      return;
+    }
+    if (!inputTransferAmount.value) {
+      modalWin("err", "You must enter amount for the transaction");
       return;
     }
     if (transfer < 0) {
@@ -392,7 +391,7 @@ btnLoan.addEventListener("click", function (e) {
       highlightLastMove(300);
 
       btnModalAccept.removeEventListener("click", confOp);
-      modalWinClose();
+      modalWinClose("close");
     };
 
     const message = `${
@@ -402,8 +401,7 @@ btnLoan.addEventListener("click", function (e) {
     }
     `;
 
-    modalWin("conf", message);
-    modalWinClose(confOp);
+    modalWin("conf", message, confOp);
     btnModalAccept.addEventListener("click", confOp);
   } else {
     if (!requestedLoan) {
@@ -418,7 +416,7 @@ btnLoan.addEventListener("click", function (e) {
       modalWin(
         "err",
         `To apply for Loan you must have a deposit not less 10% of requested Loan amount. In your case you have to deposit at least ${
-          requestedLoan * 0.1 + activeUser.currency.sign
+          requestedLoan * 0.1
         }`
       );
       return;
@@ -429,8 +427,7 @@ btnLoan.addEventListener("click", function (e) {
 //Close account
 btnClose.addEventListener("click", function (e) {
   e.preventDefault();
-  // inputCloseUsername
-  // inputClosePin
+
   if (
     activeUser.username === inputCloseUsername.value &&
     activeUser.pin === +inputClosePin.value
@@ -443,8 +440,7 @@ btnClose.addEventListener("click", function (e) {
       logout();
       cleanInputs(inputCloseUsername, inputClosePin);
 
-      btnModalAccept.removeEventListener("click", confOp);
-      modalWinClose();
+      modalWinClose("close");
     };
 
     const message = `${
@@ -452,7 +448,7 @@ btnClose.addEventListener("click", function (e) {
     }, you are going to delete your account. There will be no way to restore it later.
     `;
 
-    modalWin("conf", message);
+    modalWin("conf", message, confOp);
     btnModalAccept.addEventListener("click", confOp);
   } else {
     if (!inputCloseUsername.value) {
@@ -483,6 +479,20 @@ btnSort.addEventListener("click", function () {
 
 //////////MODAL WINDOW/////////////
 
+function modalWin(type, mes, confOp) {
+  // type: err, conf
+  boxOverlay.classList.remove("hidden--all");
+  boxModal.classList.remove("hidden--all");
+  modalWinClose(type, confOp);
+  if (type === "conf") {
+    boxModalConf.classList.remove("hidden--all");
+    labelModalConf.textContent = mes;
+  } else if (type === "err") {
+    boxModalErr.classList.remove("hidden--all");
+    labelModalErr.textContent = mes;
+  }
+}
+
 const modalWinHiding = function () {
   boxOverlay.classList.add("hidden--all");
   boxModal.classList.add("hidden--all");
@@ -490,32 +500,20 @@ const modalWinHiding = function () {
   boxModalErr.classList.add("hidden--all");
 };
 
-function modalWin(type, mes) {
-  // type: err, conf
-  boxOverlay.classList.remove("hidden--all");
-  boxModal.classList.remove("hidden--all");
-  if (type === "conf") {
-    boxModalConf.classList.remove("hidden--all");
-    labelModalConf.textContent = mes;
-
-    console.log("accepted");
-  } else if (type === "err") {
-    boxModalErr.classList.remove("hidden--all");
-    labelModalErr.textContent = mes;
+function modalWinClose(type, confOp) {
+  if (type === "close") {
+    modalWinHiding();
+    return;
   }
-}
 
-function modalWinClose(confOp) {
   const modalClose = function () {
     modalWinHiding();
-    btnModalAccept.removeEventListener("click", confOp);
+    if (type === "conf") btnModalAccept.removeEventListener("click", confOp);
   };
 
   [boxOverlay, btnModalClose, btnModalErr, btnModalDecline].forEach((el) =>
     el.addEventListener("click", modalClose)
   );
-
-  if (!confOp) modalWinHiding();
 }
 
 //////////GENERAL REUSABLE FUNCTIONS/////////////
