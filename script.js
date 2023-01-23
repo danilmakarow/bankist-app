@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -7,28 +7,28 @@
 // Data
 const curr = {
   eur: {
-    name: 'Euro',
-    abb: 'eur',
-    sign: '€',
+    name: "Euro",
+    abb: "eur",
+    sign: "€",
     excRate: 1,
   },
   usd: {
-    name: 'Dollar',
-    abb: 'usd',
-    sign: '$',
+    name: "Dollar",
+    abb: "usd",
+    sign: "$",
     excRate: 1.08,
   },
   uah: {
-    name: 'Hryvnia',
-    abb: 'uah',
-    sign: '₴',
+    name: "Hryvnia",
+    abb: "uah",
+    sign: "₴",
     excRate: 39.75,
   },
 };
 const clients = {
   account1: {
-    owner: 'Danil Makarov',
-    username: 'dm',
+    owner: "Danil Makarov",
+    username: "dm",
     movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
     interestRate: 1,
     pin: 1234,
@@ -36,8 +36,8 @@ const clients = {
   },
 
   account2: {
-    owner: 'Jonas Schmedtmann',
-    username: 'js',
+    owner: "Jonas Schmedtmann",
+    username: "js",
     movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
     interestRate: 1.2, // %
     pin: 1111,
@@ -45,8 +45,8 @@ const clients = {
   },
 
   account3: {
-    owner: 'Jessica Davis',
-    username: 'jd',
+    owner: "Jessica Davis",
+    username: "jd",
     movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
     interestRate: 1.5,
     pin: 2222,
@@ -54,8 +54,8 @@ const clients = {
   },
 
   account4: {
-    owner: 'Steven Thomas Williams',
-    username: 'stw',
+    owner: "Steven Thomas Williams",
+    username: "stw",
     movements: [200, -200, 340, -300, -20, 50, 400, -460],
     interestRate: 0.7,
     pin: 3333,
@@ -63,8 +63,8 @@ const clients = {
   },
 
   account5: {
-    owner: 'Sarah Smith',
-    username: 'ss',
+    owner: "Sarah Smith",
+    username: "ss",
     movements: [430, 1000, 700, 50, 90],
     interestRate: 1,
     pin: 4444,
@@ -81,80 +81,80 @@ const accounts = [
 ];
 
 // Elements
-const labelWelcome = document.querySelector('.welcome');
-const labelDate = document.querySelector('.date');
-const labelBalance = document.querySelector('.balance__value');
-const labelSumIn = document.querySelector('.summary__value--in');
-const labelSumOut = document.querySelector('.summary__value--out');
-const labelSumInterest = document.querySelector('.summary__value--interest');
-const labelTimer = document.querySelector('.timer');
-const labelLoginGlobal = document.querySelector('.header__login');
-const logoIconNav = document.querySelector('.logo__nav');
+const labelWelcome = document.querySelector(".welcome");
+const labelDate = document.querySelector(".date");
+const labelBalance = document.querySelector(".balance__value");
+const labelSumIn = document.querySelector(".summary__value--in");
+const labelSumOut = document.querySelector(".summary__value--out");
+const labelSumInterest = document.querySelector(".summary__value--interest");
+const labelTimer = document.querySelector(".timer");
+const labelLoginGlobal = document.querySelector(".header__login");
+const logoIconNav = document.querySelector(".logo__nav");
 
-const containerApp = document.querySelector('.app');
-const containerNav = document.querySelector('.nav');
-const containerMovements = document.querySelector('.movements');
+const containerApp = document.querySelector(".app");
+const containerNav = document.querySelector(".nav");
+const containerMovements = document.querySelector(".movements");
 
-const btnLogin = document.querySelector('.login__btn');
-const btnTransfer = document.querySelector('.form__btn--transfer');
-const btnLoan = document.querySelector('.form__btn--loan');
-const btnClose = document.querySelector('.form__btn--close');
-const btnSort = document.querySelector('.btn--sort');
+const btnLogin = document.querySelector(".login__btn");
+const btnTransfer = document.querySelector(".form__btn--transfer");
+const btnLoan = document.querySelector(".form__btn--loan");
+const btnClose = document.querySelector(".form__btn--close");
+const btnSort = document.querySelector(".btn--sort");
 
-const inputLoginUsername = document.querySelector('.login__input--user');
-const inputLoginPin = document.querySelector('.login__input--pin');
-const inputTransferTo = document.querySelector('.form__input--to');
-const inputTransferAmount = document.querySelector('.form__input--amount');
-const inputLoanAmount = document.querySelector('.form__input--loan-amount');
-const inputCloseUsername = document.querySelector('.form__input--user');
-const inputClosePin = document.querySelector('.form__input--pin');
+const inputLoginUsername = document.querySelector(".login__input--user");
+const inputLoginPin = document.querySelector(".login__input--pin");
+const inputTransferTo = document.querySelector(".form__input--to");
+const inputTransferAmount = document.querySelector(".form__input--amount");
+const inputLoanAmount = document.querySelector(".form__input--loan-amount");
+const inputCloseUsername = document.querySelector(".form__input--user");
+const inputClosePin = document.querySelector(".form__input--pin");
 
 //Login form
-const containerLogin = document.querySelector('.login__window');
-const formLogin = document.querySelector('.login__form--login');
-const formSign = document.querySelector('.login__form--signup');
+const containerLogin = document.querySelector(".login__window");
+const formLogin = document.querySelector(".login__form--login");
+const formSign = document.querySelector(".login__form--signup");
 
 //Login global
-const inputLogUserGlobal = document.querySelector('.login__input--global--usr');
-const inputLogPinGlobal = document.querySelector('.login__input--global--pin');
-const btnLoginGlobal = document.querySelector('.login__btn--global--login');
-const loginFormChange = document.querySelector('.register__box--link');
+const inputLogUserGlobal = document.querySelector(".login__input--global--usr");
+const inputLogPinGlobal = document.querySelector(".login__input--global--pin");
+const btnLoginGlobal = document.querySelector(".login__btn--global--login");
+const loginFormChange = document.querySelector(".register__box--link");
 
 //Signup global
 const inputSignUserGlobal = document.querySelector(
-  '.signup__input--global--usr'
+  ".signup__input--global--usr"
 );
 const inputSignPinGlobal = document.querySelector(
-  '.signup__input--global--pin'
+  ".signup__input--global--pin"
 );
-const inputLangGlobal = document.querySelector('#select-currency');
-const btnSignGlobal = document.querySelector('.login__btn--global--signup');
-const usernamePreShow = document.querySelector('.login__username--place');
-const LabelUsernamePreShow = document.querySelector('.login__username');
+const inputLangGlobal = document.querySelector("#select-currency");
+const btnSignGlobal = document.querySelector(".login__btn--global--signup");
+const usernamePreShow = document.querySelector(".login__username--place");
+const LabelUsernamePreShow = document.querySelector(".login__username");
 
 //Switch login box
-const containerSwitchLink = document.querySelectorAll('.register__box--link');
-const containerRegisterBox = document.querySelectorAll('.register__box');
+const containerSwitchLink = document.querySelectorAll(".register__box--link");
+const containerRegisterBox = document.querySelectorAll(".register__box");
 
 //Errors display
-const containerError = document.querySelector('.error__box');
-const labelError = document.querySelector('.error__box--text');
-const btnError = document.querySelector('.error__box--icon');
+const containerError = document.querySelector(".error__box");
+const labelError = document.querySelector(".error__box--text");
+const btnError = document.querySelector(".error__box--icon");
 
 ////// Modal Window //////
-const boxModal = document.querySelector('.modal-window');
-const boxOverlay = document.querySelector('.overlay');
+const boxModal = document.querySelector(".modal-window");
+const boxOverlay = document.querySelector(".overlay");
 
-const btnModalClose = document.querySelector('.modal-close');
+const btnModalClose = document.querySelector(".modal-close");
 
-const boxModalErr = document.querySelector('.modal-error');
-const btnModalErr = document.querySelector('.modal-btn--err');
-const labelModalErr = document.querySelector('.modal-message--err');
+const boxModalErr = document.querySelector(".modal-error");
+const btnModalErr = document.querySelector(".modal-btn--err");
+const labelModalErr = document.querySelector(".modal-message--err");
 
-const boxModalConf = document.querySelector('.modal-confirm');
-const labelModalConf = document.querySelector('.modal-message--confirm');
-const btnModalAccept = document.querySelector('.modal-btn--accept');
-const btnModalDecline = document.querySelector('.modal-btn--decline');
+const boxModalConf = document.querySelector(".modal-confirm");
+const labelModalConf = document.querySelector(".modal-message--confirm");
+const btnModalAccept = document.querySelector(".modal-btn--accept");
+const btnModalDecline = document.querySelector(".modal-btn--decline");
 
 let activeUser;
 let currentLoginForm = 0; //0-login , 1-signup
@@ -163,52 +163,52 @@ let currentLoginForm = 0; //0-login , 1-signup
 
 // Switch login signup box
 const loginGlobalSwitch = function (e) {
-  formLogin.classList.toggle('hidden--all');
-  formSign.classList.toggle('hidden--all');
+  formLogin.classList.toggle("hidden--all");
+  formSign.classList.toggle("hidden--all");
 
-  containerRegisterBox.forEach(el => el.classList.toggle('hidden--all'));
+  containerRegisterBox.forEach((el) => el.classList.toggle("hidden--all"));
   // console.log(currentLoginForm);
 
   if (currentLoginForm) {
     //for log in
-    labelLoginGlobal.textContent = 'Sign in to Bankist';
+    labelLoginGlobal.textContent = "Sign in to Bankist";
     currentLoginForm--;
   } else {
     //for sign up
-    labelLoginGlobal.textContent = 'Join Bankist';
+    labelLoginGlobal.textContent = "Join Bankist";
     currentLoginForm++;
   }
   errorBoxRemove();
 };
-containerSwitchLink.forEach(el =>
-  el.addEventListener('click', loginGlobalSwitch)
+containerSwitchLink.forEach((el) =>
+  el.addEventListener("click", loginGlobalSwitch)
 );
 
 // Error box connecting
 const errorBox = function (mes = 0) {
-  if (typeof mes === 'string') {
+  if (typeof mes === "string") {
     labelError.textContent = mes;
-    containerError.classList.remove('hidden--all');
+    containerError.classList.remove("hidden--all");
     // console.log('err without mes', mes);
   } else {
     // console.log('err with mes', mes);
 
-    containerError.classList.add('hidden--all');
+    containerError.classList.add("hidden--all");
   }
 };
-btnError.addEventListener('click', errorBox);
+btnError.addEventListener("click", errorBox);
 
 // Login GLOBAL
-btnLoginGlobal.addEventListener('click', function (e) {
+btnLoginGlobal.addEventListener("click", function (e) {
   e.preventDefault();
 
   const account = accounts.find(
-    acc => acc.username === inputLogUserGlobal.value
+    (acc) => acc.username === inputLogUserGlobal.value
   );
 
   if (account && account.pin === +inputLogPinGlobal.value) {
-    containerLogin.classList.add('hidden--all');
-    containerNav.classList.remove('hidden');
+    containerLogin.classList.add("hidden--all");
+    containerNav.classList.remove("hidden");
     loginSucceed(account);
     cleanInputs(inputLogUserGlobal, inputLogPinGlobal);
   } else {
@@ -225,7 +225,7 @@ btnLoginGlobal.addEventListener('click', function (e) {
 });
 
 // Signup GLOBAL
-btnSignGlobal.addEventListener('click', function (e) {
+btnSignGlobal.addEventListener("click", function (e) {
   e.preventDefault();
 
   const newPin = +inputSignPinGlobal.value;
@@ -236,9 +236,9 @@ btnSignGlobal.addEventListener('click', function (e) {
   // console.log(newName, newUserName, newPin, newCurr);
   if (
     newName &&
-    !accounts.find(acc => acc.username === newUserName) &&
+    !accounts.find((acc) => acc.username === newUserName) &&
     `${newPin}`.length === 4 &&
-    newCurr !== 'empty'
+    newCurr !== "empty"
   ) {
     // add new acc to databases
     clients[`account${accounts.length + 1}`] = {
@@ -252,8 +252,8 @@ btnSignGlobal.addEventListener('click', function (e) {
     accounts.push(clients[`account${accounts.length + 1}`]);
 
     //update interface
-    containerLogin.classList.add('hidden--all');
-    containerNav.classList.remove('hidden');
+    containerLogin.classList.add("hidden--all");
+    containerNav.classList.remove("hidden");
 
     //calculate UI
     loginSucceed(accounts.slice(-1)[0]);
@@ -263,7 +263,7 @@ btnSignGlobal.addEventListener('click', function (e) {
       errorBox(`You must enter your Full name!`);
       return;
     }
-    if (accounts.find(acc => acc.username === newUserName)) {
+    if (accounts.find((acc) => acc.username === newUserName)) {
       errorBox(`There is already an account with this Username!`);
       return;
     }
@@ -271,7 +271,7 @@ btnSignGlobal.addEventListener('click', function (e) {
       errorBox(`The PIN length must be 4 digits!`);
       return;
     }
-    if (newCurr === 'empty') {
+    if (newCurr === "empty") {
       errorBox(`You have to choose currency!`);
       return;
     }
@@ -280,40 +280,40 @@ btnSignGlobal.addEventListener('click', function (e) {
 
 //Showing username while registration
 let timeout;
-inputSignUserGlobal.addEventListener('input', function () {
+inputSignUserGlobal.addEventListener("input", function () {
   clearTimeout(timeout);
   timeout = setTimeout(function () {
     // code to be executed after 1 second
     usernamePreShow.textContent = createUserNames(inputSignUserGlobal.value);
   }, 1000);
-  LabelUsernamePreShow.classList.remove('hidden');
+  LabelUsernamePreShow.classList.remove("hidden");
 });
 
 // Login from app
-btnLogin.addEventListener('click', function (e) {
+btnLogin.addEventListener("click", function (e) {
   e.preventDefault(); // Остановит автоматичесскую презегрузку. Она - дефолтное поведение при нажатии кнопки в форме в html
 
   const account = accounts.find(
-    acc => acc.username === inputLoginUsername.value
+    (acc) => acc.username === inputLoginUsername.value
   );
 
   if (account && account.pin === +inputLoginPin.value) {
     loginSucceed(account);
-  } else console.log('Login Error⛔');
+  } else console.log("Login Error⛔");
   cleanInputs(inputLoginPin, inputLoginUsername);
 });
 
 // Logout from app
-logoIconNav.addEventListener('click', logout);
+logoIconNav.addEventListener("click", logout);
 
 //////////IMPLEMENTING FUNCTIONALITY/////////////
 
 //Transfers
-btnTransfer.addEventListener('click', function (e) {
+btnTransfer.addEventListener("click", function (e) {
   e.preventDefault();
 
   const transferTo = accounts?.find(
-    acc => acc.username === inputTransferTo.value
+    (acc) => acc.username === inputTransferTo.value
   );
   const transfer = +inputTransferAmount.value;
   const transferExc = +(
@@ -340,26 +340,30 @@ btnTransfer.addEventListener('click', function (e) {
       transferExc + transferTo.currency.sign
     }`;
 
-    modalWin('conf', message);
+    modalWin("conf", message);
     modalWinClose(confOp);
 
-    btnModalAccept.addEventListener('click', confOp);
+    btnModalAccept.addEventListener("click", confOp);
   } else {
     if (!inputTransferTo.value) {
-      modalWin('err', 'You must enter your Reciever Username');
+      modalWin("err", "You must enter your Reciever Username");
+      return;
+    }
+    if (!inputTransferAmount.value) {
+      modalWin("err", "You must enter amount for the transaction");
       return;
     }
     if (!transferTo) {
-      modalWin('err', `Account ${inputTransferTo.value} not found`);
+      modalWin("err", `Account ${inputTransferTo.value} not found`);
       return;
     }
     if (transfer < 0) {
-      modalWin('err', 'You can not transfer negative value');
+      modalWin("err", "You can not transfer negative value");
       return;
     }
     if (!(transfer <= activeUser.balance)) {
       modalWin(
-        'err',
+        "err",
         `Not enough money on balance. To continue transfer deposit ${
           transfer - activeUser.balance + activeUser.currency.sign
         }`
@@ -370,14 +374,14 @@ btnTransfer.addEventListener('click', function (e) {
 });
 
 // Requesting loan
-btnLoan.addEventListener('click', function (e) {
+btnLoan.addEventListener("click", function (e) {
   e.preventDefault();
   // At least 1 deposit with more than 10% of requested loan amount.
 
   const requestedLoan = +inputLoanAmount.value;
 
   if (
-    activeUser.movements.some(el => el > requestedLoan * 0.1) &&
+    activeUser.movements.some((el) => el > requestedLoan * 0.1) &&
     requestedLoan > 0
   ) {
     const confOp = function () {
@@ -387,34 +391,34 @@ btnLoan.addEventListener('click', function (e) {
       cleanInputs(inputLoanAmount);
       highlightLastMove(300);
 
-      btnModalAccept.removeEventListener('click', confOp);
+      btnModalAccept.removeEventListener("click", confOp);
       modalWinClose();
     };
 
     const message = `${
-      activeUser.owner.split(' ')[0]
+      activeUser.owner.split(" ")[0]
     }, you are going to apply for a loan at ${
       requestedLoan + activeUser.currency.sign
     }
     `;
 
-    modalWin('conf', message);
+    modalWin("conf", message);
     modalWinClose(confOp);
-    btnModalAccept.addEventListener('click', confOp);
+    btnModalAccept.addEventListener("click", confOp);
   } else {
     if (!requestedLoan) {
-      modalWin('err', 'You must enter Loan amount');
+      modalWin("err", "You must enter Loan amount");
       return;
     }
     if (requestedLoan < 0) {
-      modalWin('err', 'You cannot request negative Loan');
+      modalWin("err", "You cannot request negative Loan");
       return;
     }
-    if (!activeUser.movements.some(el => el > requestedLoan * 0.1)) {
+    if (!activeUser.movements.some((el) => el > requestedLoan * 0.1)) {
       modalWin(
-        'err',
+        "err",
         `To apply for Loan you must have a deposit not less 10% of requested Loan amount. In your case you have to deposit at least ${
-          requestedLoan * 0.1
+          requestedLoan * 0.1 + activeUser.currency.sign
         }`
       );
       return;
@@ -423,7 +427,7 @@ btnLoan.addEventListener('click', function (e) {
 });
 
 //Close account
-btnClose.addEventListener('click', function (e) {
+btnClose.addEventListener("click", function (e) {
   e.preventDefault();
   // inputCloseUsername
   // inputClosePin
@@ -433,38 +437,38 @@ btnClose.addEventListener('click', function (e) {
   ) {
     const confOp = function () {
       accounts.splice(
-        accounts.findIndex(acc => acc === activeUser),
+        accounts.findIndex((acc) => acc === activeUser),
         1
       );
       logout();
       cleanInputs(inputCloseUsername, inputClosePin);
 
-      btnModalAccept.removeEventListener('click', confOp);
+      btnModalAccept.removeEventListener("click", confOp);
       modalWinClose();
     };
 
     const message = `${
-      activeUser.owner.split(' ')[0]
+      activeUser.owner.split(" ")[0]
     }, you are going to delete your account. There will be no way to restore it later.
     `;
 
-    modalWin('conf', message);
-    btnModalAccept.addEventListener('click', confOp);
+    modalWin("conf", message);
+    btnModalAccept.addEventListener("click", confOp);
   } else {
     if (!inputCloseUsername.value) {
-      modalWin('err', 'You must enter Username');
+      modalWin("err", "You must enter Username");
       return;
     }
     if (!inputClosePin.value) {
-      modalWin('err', 'You must enter your PIN');
+      modalWin("err", "You must enter your PIN");
       return;
     }
     if (activeUser.username !== inputCloseUsername.value) {
-      modalWin('err', 'Incorrect Username');
+      modalWin("err", "Incorrect Username");
       return;
     }
     if (activeUser.pin !== +inputClosePin.value) {
-      modalWin('err', 'PIN is incorrect');
+      modalWin("err", "PIN is incorrect");
       return;
     }
   }
@@ -472,7 +476,7 @@ btnClose.addEventListener('click', function (e) {
 
 //Sorting movements
 let isSorted = false;
-btnSort.addEventListener('click', function () {
+btnSort.addEventListener("click", function () {
   displayMovenments(activeUser.movements, isSorted);
   isSorted = !isSorted;
 });
@@ -480,23 +484,23 @@ btnSort.addEventListener('click', function () {
 //////////MODAL WINDOW/////////////
 
 const modalWinHiding = function () {
-  boxOverlay.classList.add('hidden--all');
-  boxModal.classList.add('hidden--all');
-  boxModalConf.classList.add('hidden--all');
-  boxModalErr.classList.add('hidden--all');
+  boxOverlay.classList.add("hidden--all");
+  boxModal.classList.add("hidden--all");
+  boxModalConf.classList.add("hidden--all");
+  boxModalErr.classList.add("hidden--all");
 };
 
 function modalWin(type, mes) {
   // type: err, conf
-  boxOverlay.classList.remove('hidden--all');
-  boxModal.classList.remove('hidden--all');
-  if (type === 'conf') {
-    boxModalConf.classList.remove('hidden--all');
+  boxOverlay.classList.remove("hidden--all");
+  boxModal.classList.remove("hidden--all");
+  if (type === "conf") {
+    boxModalConf.classList.remove("hidden--all");
     labelModalConf.textContent = mes;
 
-    console.log('accepted');
-  } else if (type === 'err') {
-    boxModalErr.classList.remove('hidden--all');
+    console.log("accepted");
+  } else if (type === "err") {
+    boxModalErr.classList.remove("hidden--all");
     labelModalErr.textContent = mes;
   }
 }
@@ -504,11 +508,11 @@ function modalWin(type, mes) {
 function modalWinClose(confOp) {
   const modalClose = function () {
     modalWinHiding();
-    btnModalAccept.removeEventListener('click', confOp);
+    btnModalAccept.removeEventListener("click", confOp);
   };
 
-  [boxOverlay, btnModalClose, btnModalErr, btnModalDecline].forEach(el =>
-    el.addEventListener('click', modalClose)
+  [boxOverlay, btnModalClose, btnModalErr, btnModalDecline].forEach((el) =>
+    el.addEventListener("click", modalClose)
   );
 
   if (!confOp) modalWinHiding();
@@ -518,59 +522,60 @@ function modalWinClose(confOp) {
 
 // LOGIN GENERAL
 const loginSucceed = function (acc) {
-  console.log('Login successful');
+  console.log("Login successful");
   activeUser = acc;
 
-  containerApp.classList.remove('hidden');
-  LabelUsernamePreShow.classList.add('hidden');
+  containerApp.classList.remove("hidden");
+  LabelUsernamePreShow.classList.add("hidden");
 
   errorBoxRemove();
   displayMovenments(activeUser.movements);
   calcPrintBalances(activeUser);
   highlightLastMove(1000);
+  dateGeneral();
 
-  labelWelcome.textContent = `Good Day, ${activeUser.owner.split(' ')[0]}!`;
+  labelWelcome.textContent = `Good Day, ${activeUser.owner.split(" ")[0]}!`;
 };
 
 //logout general
 function logout() {
-  activeUser = '';
+  activeUser = "";
   labelWelcome.textContent = `Log in to get started`;
 
-  containerNav.classList.add('hidden');
-  containerApp.classList.add('hidden');
-  containerLogin.classList.remove('hidden--all');
+  containerNav.classList.add("hidden");
+  containerApp.classList.add("hidden");
+  containerLogin.classList.remove("hidden--all");
 }
 
 const errorBoxRemove = () =>
-  containerError.classList.contains('hidden-all') ? 0 : errorBox();
+  containerError.classList.contains("hidden-all") ? 0 : errorBox();
 
-const cleanInputs = (...inputs) => inputs.forEach(el => (el.value = ''));
+const cleanInputs = (...inputs) => inputs.forEach((el) => (el.value = ""));
 
 const highlightLastMove = function (time) {
-  const lastRow = document.querySelector('.movements__row');
+  const lastRow = document.querySelector(".movements__row");
   setTimeout(() => {
-    lastRow.classList.add('highlight');
+    lastRow.classList.add("highlight");
   }, time);
 
   setTimeout(() => {
-    lastRow.classList.remove('highlight');
+    lastRow.classList.remove("highlight");
   }, time + 300);
 };
 
 const displayMovenments = function (arr, sort = 0) {
-  containerMovements.innerHTML = '';
+  containerMovements.innerHTML = "";
   const toDisplay = [...arr];
   if (sort) toDisplay.sort((a, b) => a - b);
   toDisplay.forEach(function (mov, i) {
-    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const type = mov > 0 ? "deposit" : "withdrawal";
     const html = `
     <div class="movements__row">
       <div class="movements__type movements__type--${type}"> ${type.toUpperCase()}</div>
       <div class="movements__value">${mov}${activeUser.currency.sign}</div>
     </div>
     `;
-    containerMovements.insertAdjacentHTML('afterbegin', html);
+    containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 };
 
@@ -579,13 +584,13 @@ const calcPrintBalances = function (activeUser) {
   const intRate = activeUser.interestRate;
 
   const sum = mov.reduce((acc, el) => acc + el, 0).toFixed(2);
-  const income = mov.filter(el => el > 0).reduce((acc, el) => acc + el, 0);
+  const income = mov.filter((el) => el > 0).reduce((acc, el) => acc + el, 0);
   const outcome = Math.abs(
-    mov.filter(el => el < 0).reduce((acc, el) => acc + el, 0)
+    mov.filter((el) => el < 0).reduce((acc, el) => acc + el, 0)
   );
   const interest = mov // виплата відсотків, 1.2% с депозиту
-    .filter(el => el > 0 && el * (intRate / 100) >= 1)
-    .map(el => el * (intRate / 100))
+    .filter((el) => el > 0 && el * (intRate / 100) >= 1)
+    .map((el) => el * (intRate / 100))
     .reduce((acc, el) => acc + el)
     .toFixed(2);
 
@@ -600,108 +605,20 @@ const calcPrintBalances = function (activeUser) {
 const createUserNames = function (name) {
   name = name
     .trim()
-    .split(' ')
-    .map(name => name[0])
-    .join('')
+    .split(" ")
+    .map((name) => name[0])
+    .join("")
     .toLowerCase();
   return name;
 };
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
-
-// const currencies = new Map([
-//   ['USD', 'United States dollar'],
-//   ['EUR', 'Euro'],
-//   ['GBP', 'Pound sterling'],
-// ]);
-
-const account1 = {
-  owner: 'Jonas Schmedtmann',
-  movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
-  interestRate: 1.2, // %
-  pin: 1111,
-
-  movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
-    '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
-  ],
-  currency: 'EUR',
-  locale: 'pt-PT', // de-DE
-};
-
-const account2 = {
-  owner: 'Jessica Davis',
-  movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
-  interestRate: 1.5,
-  pin: 2222,
-
-  movementsDates: [
-    '2019-11-01T13:15:33.035Z',
-    '2019-11-30T09:48:16.867Z',
-    '2019-12-25T06:04:23.907Z',
-    '2020-01-25T14:18:46.235Z',
-    '2020-02-05T16:33:06.386Z',
-    '2020-04-10T14:43:26.374Z',
-    '2020-06-25T18:49:59.371Z',
-    '2020-07-26T12:01:20.894Z',
-  ],
-  currency: 'USD',
-  locale: 'en-US',
-};
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-/////////////////////////////////////////////////
-
-/* ///////////////////////////////////////////////
-
-
-console.log(23 === 23.0);
-
-// Перевод цифр в стринг
-console.log(Number('23'));
-console.log(+'23');
-
-console.log('/////////////  1  /////////////');
-
-//Разбор (Парсинг)
-// parseInt Метод, что вернет цифры с стрингов с цифрами, и даже буквами. Но нельзя что бы стринг начинался с букв. Второй аргумент - система числення в которой находяться цифри. Можно просто вписать 10 и не париться
-// parseFloat - такой же, но ещё принимает не целые числа. Обывчный нет
-console.log(Number.parseInt('30px', 10));
-console.log(Number.parseInt('e23'));
-
-console.log(Number.parseFloat('  2.5rem  '));
-console.log(Number.parseInt('  2.5rem '));
-
-console.log(parseInt('  2.5rem ')); // в глобале работает без вызова обьекта(?ебать)
-
-console.log('////////////// 2  /////////////');
-
-// Проверяет если значение - НаН
-console.log(Number.isNaN(20));
-console.log(Number.isNaN('20'));
-console.log(Number.isNaN(+'r20'));
-console.log(Number.isNaN(10 / 0));
-
-console.log('/////////////  3  /////////////');
-
-//Проверяет цифра ли значение. Обычно имеено он подходит для проверки цифра ли значение
-console.log(Number.isFinite(20));
-console.log(Number.isFinite('20'));
-console.log(Number.isFinite(+'20'));
-console.log(Number.isFinite(10 / 0));
-
-console.log('/////////////  4  /////////////');
-
-console.log(Number.isInteger(23));
-console.log(Number.isInteger(23.0));
-console.log(Number.isInteger(23.0 / 0));
-
-*/ ///////////////////////////////////////////////
+// Setting up date
+function dateGeneral() {
+  var today = new Date();
+  var date = today.toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+  document.querySelector(".date").textContent = date;
+}
