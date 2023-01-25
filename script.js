@@ -570,7 +570,7 @@ const displayMovenments = function (arr, sort = 0) {
     const html = `
     <div class="movements__row">
       <div class="movements__type movements__type--${type}"> ${type.toUpperCase()}</div>
-      <div class="movements__value">${mov}${activeUser.currency.sign}</div>
+      <div class="movements__value">${mov.toFixed(2)} ${activeUser.currency.sign}</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML("afterbegin", html);
