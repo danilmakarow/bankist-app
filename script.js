@@ -5,26 +5,7 @@
 // BANKIST APP
 
 // Data
-const curr = {
-  eur: {
-    name: 'Euro',
-    abb: 'eur',
-    sign: '€',
-    excRate: 1,
-  },
-  usd: {
-    name: 'Dollar',
-    abb: 'usd',
-    sign: '$',
-    excRate: 1.08,
-  },
-  uah: {
-    name: 'Hryvnia',
-    abb: 'uah',
-    sign: '₴',
-    excRate: 39.75,
-  },
-};
+
 const clients = {
   account1: {
     owner: 'Danil Makarov',
@@ -42,8 +23,8 @@ const clients = {
     ],
     interestRate: 1,
     pin: 1234,
-    currency: curr.uah,
     locale: 'ua-UA',
+    currency: 'UAH',
   },
 
   account2: {
@@ -62,8 +43,8 @@ const clients = {
     ],
     interestRate: 1.2, // %
     pin: 1111,
-    currency: curr.eur,
     locale: 'pt-PT',
+    currency: 'EUR',
   },
 
   account3: {
@@ -82,8 +63,8 @@ const clients = {
     ],
     interestRate: 1.5,
     pin: 2222,
-    currency: curr.eur,
     locale: 'en-US',
+    currency: 'USD',
   },
 
   account4: {
@@ -102,8 +83,8 @@ const clients = {
     ],
     interestRate: 0.7,
     pin: 3333,
-    currency: curr.usd,
-    locale: 'pt-PT',
+    locale: 'en-GB',
+    currency: 'EUR',
   },
 
   account5: {
@@ -119,8 +100,8 @@ const clients = {
     ],
     interestRate: 1,
     pin: 4444,
-    currency: curr.uah,
-    locale: 'en-UK',
+    locale: 'en-GB',
+    currency: 'GBP',
   },
 };
 
@@ -281,11 +262,12 @@ btnSignGlobal.addEventListener('click', function (e) {
   e.preventDefault();
 
   const newPin = +inputSignPinGlobal.value.trim();
-  const newCurr = inputLangGlobal.value;
+  const newCurr = inputLangGlobal.value.split(', ');
   const newName = inputSignUserGlobal.value.trim();
   const newUserName = createUserNames(inputSignUserGlobal.value);
 
-  // console.log(newName, newUserName, newPin, newCurr);
+  console.log(newCurr);
+  // eur usd uah
   if (
     newName &&
     !accounts.find(acc => acc.username === newUserName) &&
@@ -297,9 +279,15 @@ btnSignGlobal.addEventListener('click', function (e) {
       owner: newName,
       username: newUserName,
       movements: [1000, 1000, -500],
+      movementsDates: [
+        new Date().toISOString(),
+        new Date().toISOString(),
+        new Date().toISOString(),
+      ],
       interestRate: 1.2,
       pin: newPin,
-      currency: curr[`${newCurr}`],
+      locale: newCurr[1],
+      currency: newCurr[0],
     };
     accounts.push(clients[`account${accounts.length + 1}`]);
 
@@ -649,16 +637,22 @@ const displayMovenments = function (acc, sort) {
     acc.movementsDates[i],
   ]);
   if (sort) toDisplay.sort((a, b) => a[0] - b[0]);
+
+  const options = {
+    style: 'currency',
+    currency: activeUser.currency,
+  };
+
   toDisplay.forEach(function (mov) {
     const type = mov[0] > 0 ? 'deposit' : 'withdrawal';
     const date = calcdates(mov[1]);
+    let op = new Intl.NumberFormat(activeUser.locale, options).format(mov[0]);
+    if (activeUser.currency === 'UAH') op = op.replace('грн.', '₴');
     const html = `
     <div class="movements__row">
       <div class="movements__type movements__type--${type}"> ${type.toUpperCase()}</div>
       <div class="movements__date">${date}</div>
-      <div class="movements__value">${mov[0].toFixed(2).replace('.', ',')} ${
-      activeUser.currency.sign
-    }</div>
+      <div class="movements__value">${op}</div>
     </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -668,25 +662,42 @@ const displayMovenments = function (acc, sort) {
 const calcPrintBalances = function (activeUser) {
   const mov = activeUser.movements;
   const intRate = activeUser.interestRate;
+  const options = {
+    style: 'currency',
+    currency: activeUser.currency,
+  };
 
-  const sum = mov.reduce((acc, el) => acc + el, 0).toFixed(2);
-  const income = Math.floor(
-    mov.filter(el => el > 0).reduce((acc, el) => acc + el, 0)
+  let sum = Number(mov.reduce((acc, el) => acc + el, 0).toFixed(2));
+  let income = Number(
+    Math.floor(mov.filter(el => el > 0).reduce((acc, el) => acc + el, 0))
   );
-  const outcome = Math.floor(
-    Math.abs(mov.filter(el => el < 0).reduce((acc, el) => acc + el, 0))
+  let outcome = Number(
+    Math.floor(
+      Math.abs(mov.filter(el => el < 0).reduce((acc, el) => acc + el, 0))
+    )
   );
-  const interest = mov // виплата відсотків, 1.2% с депозиту
-    .filter(el => el > 0 && el * (intRate / 100) >= 1)
-    .map(el => el * (intRate / 100))
-    .reduce((acc, el) => acc + el)
-    .toFixed(2);
+  let interest = Number(
+    mov // виплата відсотків, 1.2% с депозиту
+      .filter(el => el > 0 && el * (intRate / 100) >= 1)
+      .map(el => el * (intRate / 100))
+      .reduce((acc, el) => acc + el)
+      .toFixed(2)
+  );
+
+  let arr = [sum, income, outcome, interest].map(el =>
+    new Intl.NumberFormat(activeUser.locale, options).format(el)
+  );
+
+  if (activeUser.currency === 'UAH')
+    arr = arr.map(el => el.replace('грн.', '₴'));
+
+  [sum, income, outcome, interest] = [...arr];
 
   activeUser.balance = sum;
-  labelBalance.textContent = `${sum} ${activeUser.currency.sign}`;
-  labelSumIn.textContent = `${income} ${activeUser.currency.sign}`;
-  labelSumOut.textContent = `${outcome} ${activeUser.currency.sign}`;
-  labelSumInterest.textContent = `${interest} ${activeUser.currency.sign}`;
+  labelBalance.textContent = `${sum}`;
+  labelSumIn.textContent = `${income}`;
+  labelSumOut.textContent = `${outcome}`;
+  labelSumInterest.textContent = `${interest}`;
 };
 
 // Для создания юсернейма новым юзерам
@@ -699,15 +710,3 @@ const createUserNames = function (name) {
     .toLowerCase();
   return name;
 };
-
-// Setting up date
-function dateGeneral() {
-  const dateDisplay = new Date();
-  const [month, day, year, hours, minutes] = [
-    `${dateDisplay.getMonth() + 1}`.padStart(2, 0),
-    `${dateDisplay.getDate()}`.padStart(2, 0),
-    dateDisplay.getFullYear(),
-    `${dateDisplay.getHours()}`.padStart(2, 0),
-    `${dateDisplay.getMinutes()}`.padStart(2, 0),
-  ];
-}
