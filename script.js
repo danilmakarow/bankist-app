@@ -29,7 +29,7 @@ const clients = {
   account1: {
     owner: 'Danil Makarov',
     username: 'dm',
-    movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300, 350, -200, 100],
+    movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
     movementsDates: [
       '2022-04-18T21:31:17.178Z',
       '2022-04-23T07:42:02.383Z',
@@ -38,14 +38,12 @@ const clients = {
       '2022-12-01T10:17:24.185Z',
       '2023-01-05T17:01:17.194Z',
       '2023-01-11T23:36:17.929Z',
-      '2023-01-24T10:51:36.790Z',
-      '2023-01-24T10:51:36.790Z',
       '2023-01-26T10:51:36.790Z',
-      '2023-01-27T10:51:36.790Z',
     ],
     interestRate: 1,
     pin: 1234,
     currency: curr.uah,
+    locale: 'ua-UA',
   },
 
   account2: {
@@ -65,6 +63,7 @@ const clients = {
     interestRate: 1.2, // %
     pin: 1111,
     currency: curr.eur,
+    locale: 'pt-PT',
   },
 
   account3: {
@@ -84,6 +83,7 @@ const clients = {
     interestRate: 1.5,
     pin: 2222,
     currency: curr.eur,
+    locale: 'en-US',
   },
 
   account4: {
@@ -103,6 +103,7 @@ const clients = {
     interestRate: 0.7,
     pin: 3333,
     currency: curr.usd,
+    locale: 'pt-PT',
   },
 
   account5: {
@@ -119,6 +120,7 @@ const clients = {
     interestRate: 1,
     pin: 4444,
     currency: curr.uah,
+    locale: 'en-UK',
   },
 };
 
@@ -253,10 +255,10 @@ btnLoginGlobal.addEventListener('click', function (e) {
   e.preventDefault();
 
   const account = accounts.find(
-    acc => acc.username === inputLogUserGlobal.value
+    acc => acc.username === inputLogUserGlobal.value.trim()
   );
 
-  if (account && account.pin === +inputLogPinGlobal.value) {
+  if (account && account.pin === +inputLogPinGlobal.value.trim()) {
     containerLogin.classList.add('hidden--all');
     containerNav.classList.remove('hidden');
     loginSucceed(account);
@@ -278,9 +280,9 @@ btnLoginGlobal.addEventListener('click', function (e) {
 btnSignGlobal.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const newPin = +inputSignPinGlobal.value;
+  const newPin = +inputSignPinGlobal.value.trim();
   const newCurr = inputLangGlobal.value;
-  const newName = inputSignUserGlobal.value;
+  const newName = inputSignUserGlobal.value.trim();
   const newUserName = createUserNames(inputSignUserGlobal.value);
 
   // console.log(newName, newUserName, newPin, newCurr);
@@ -344,10 +346,10 @@ btnLogin.addEventListener('click', function (e) {
   e.preventDefault(); // Остановит автоматичесскую презегрузку. Она - дефолтное поведение при нажатии кнопки в форме в html
 
   const account = accounts.find(
-    acc => acc.username === inputLoginUsername.value
+    acc => acc.username === inputLoginUsername.value.trim()
   );
 
-  if (account && account.pin === +inputLoginPin.value) {
+  if (account && account.pin === +inputLoginPin.value.trim()) {
     loginSucceed(account);
   } else console.log('Login Error⛔');
   cleanInputs(inputLoginPin, inputLoginUsername);
@@ -363,9 +365,9 @@ btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
 
   const transferTo = accounts?.find(
-    acc => acc.username === inputTransferTo.value
+    acc => acc.username === inputTransferTo.value.trim()
   );
-  const transfer = +inputTransferAmount.value;
+  const transfer = +inputTransferAmount.value.trim();
   const transferExc = +(
     (transfer / activeUser.currency.excRate) *
     transferTo?.currency.excRate
@@ -429,7 +431,7 @@ btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   // At least 1 deposit with more than 10% of requested loan amount.
 
-  const requestedLoan = +inputLoanAmount.value;
+  const requestedLoan = +inputLoanAmount.value.trim();
 
   if (
     activeUser.movements.some(el => el > requestedLoan * 0.1) &&
@@ -482,8 +484,8 @@ btnClose.addEventListener('click', function (e) {
   e.preventDefault();
 
   if (
-    activeUser.username === inputCloseUsername.value &&
-    activeUser.pin === +inputClosePin.value
+    activeUser.username === inputCloseUsername.value.trim() &&
+    activeUser.pin === +inputClosePin.value.trim()
   ) {
     const confOp = function () {
       accounts.splice(
@@ -583,7 +585,20 @@ const loginSucceed = function (acc) {
   displayMovenments(activeUser);
   calcPrintBalances(activeUser);
   highlightLastMove(1000);
-  dateGeneral();
+
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    // weekday: 'long',
+  };
+
+  document.querySelector('.date').textContent = Intl.DateTimeFormat(
+    activeUser.locale,
+    options
+  ).format(new Date());
 
   labelWelcome.textContent = `Good Day, ${activeUser.owner.split(' ')[0]}!`;
 };
@@ -623,13 +638,7 @@ const calcdates = date => {
   if (daysPassed === 0) return 'today';
   else if (daysPassed === 1) return 'yesterday';
   else if (daysPassed > 1 && daysPassed < 6) return `${daysPassed} days ago`;
-
-  const [month, day, year] = [
-    `${date.getMonth() + 1}`.padStart(2, 0),
-    `${date.getDate()}`.padStart(2, 0),
-    date.getFullYear(),
-  ];
-  return `${month}/${day}/${year}`;
+  return Intl.DateTimeFormat(activeUser.locale).format(date); // more on MDN Intl
 };
 
 // Updating UI movements
@@ -701,7 +710,4 @@ function dateGeneral() {
     `${dateDisplay.getHours()}`.padStart(2, 0),
     `${dateDisplay.getMinutes()}`.padStart(2, 0),
   ];
-  document.querySelector(
-    '.date'
-  ).textContent = `${month}/${day}/${year}, ${hours}:${minutes}`;
 }
