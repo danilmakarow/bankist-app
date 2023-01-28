@@ -4,6 +4,13 @@
 /////////////////////////////////////////////////
 // BANKIST APP
 
+const currencyExchange = {
+  UAH: 39.5,
+  USD: 1.05,
+  EUR: 1,
+  GBP: 1.14,
+};
+
 // Data
 
 const clients = {
@@ -25,6 +32,7 @@ const clients = {
     pin: 1234,
     locale: 'ua-UA',
     currency: 'UAH',
+    currencyExc: currencyExchange.UAH,
   },
 
   account2: {
@@ -45,6 +53,7 @@ const clients = {
     pin: 1111,
     locale: 'pt-PT',
     currency: 'EUR',
+    currencyExc: currencyExchange.EUR,
   },
 
   account3: {
@@ -65,6 +74,7 @@ const clients = {
     pin: 2222,
     locale: 'en-US',
     currency: 'USD',
+    currencyExc: currencyExchange.USD,
   },
 
   account4: {
@@ -83,8 +93,9 @@ const clients = {
     ],
     interestRate: 0.7,
     pin: 3333,
-    locale: 'en-GB',
+    locale: 'de-DE',
     currency: 'EUR',
+    currencyExc: currencyExchange.EUR,
   },
 
   account5: {
@@ -102,6 +113,7 @@ const clients = {
     pin: 4444,
     locale: 'en-GB',
     currency: 'GBP',
+    currencyExc: currencyExchange.GBP,
   },
 };
 
@@ -266,7 +278,6 @@ btnSignGlobal.addEventListener('click', function (e) {
   const newName = inputSignUserGlobal.value.trim();
   const newUserName = createUserNames(inputSignUserGlobal.value);
 
-  console.log(newCurr);
   // eur usd uah
   if (
     newName &&
@@ -288,6 +299,7 @@ btnSignGlobal.addEventListener('click', function (e) {
       pin: newPin,
       locale: newCurr[1],
       currency: newCurr[0],
+      currencyExc: currencyExchange[newCurr[0]],
     };
     accounts.push(clients[`account${accounts.length + 1}`]);
 
@@ -355,11 +367,13 @@ btnTransfer.addEventListener('click', function (e) {
   const transferTo = accounts?.find(
     acc => acc.username === inputTransferTo.value.trim()
   );
-  const transfer = +inputTransferAmount.value.trim();
+  const transfer = +inputTransferAmount.value;
   const transferExc = +(
-    (transfer / activeUser.currency.excRate) *
-    transferTo?.currency.excRate
+    (transfer / activeUser.currencyExc) *
+    transferTo?.currencyExc
   ).toFixed(2);
+
+  console.log(transfer, transferExc);
 
   if (transferTo && transfer > 0 && transfer <= activeUser.balance) {
     const confOp = function () {
@@ -375,11 +389,22 @@ btnTransfer.addEventListener('click', function (e) {
 
       modalWinClose('close');
     };
-    const message = `You are going to transfer ${
-      transfer + activeUser.currency.sign
-    } to ${transferTo.owner}. \n Receiver will get ${
-      transferExc + transferTo.currency.sign
-    }`;
+    const options = {
+      style: 'currency',
+      currency: activeUser.currency,
+    };
+    const message = `You are going to transfer ${Intl.NumberFormat(
+      activeUser.locale,
+      {
+        style: 'currency',
+        currency: activeUser.currency,
+      }
+    ).format(transfer)} to ${
+      transferTo.owner
+    }. \n Receiver will get ${Intl.NumberFormat(transferTo.locale, {
+      style: 'currency',
+      currency: transferTo.currency,
+    }).format(transferExc)}`;
 
     modalWin('conf', message, confOp);
     modalWinClose(confOp);
@@ -667,7 +692,8 @@ const calcPrintBalances = function (activeUser) {
     currency: activeUser.currency,
   };
 
-  let sum = Number(mov.reduce((acc, el) => acc + el, 0).toFixed(2));
+  let sum = mov.reduce((acc, el) => acc + el, 0).toFixed(2);
+  let sumDisp = sum;
   let income = Number(
     Math.floor(mov.filter(el => el > 0).reduce((acc, el) => acc + el, 0))
   );
@@ -684,20 +710,20 @@ const calcPrintBalances = function (activeUser) {
       .toFixed(2)
   );
 
-  let arr = [sum, income, outcome, interest].map(el =>
+  let arr = [sumDisp, income, outcome, interest].map(el =>
     new Intl.NumberFormat(activeUser.locale, options).format(el)
   );
 
   if (activeUser.currency === 'UAH')
     arr = arr.map(el => el.replace('грн.', '₴'));
 
-  [sum, income, outcome, interest] = [...arr];
+  [sumDisp, income, outcome, interest] = [...arr];
 
   activeUser.balance = sum;
-  labelBalance.textContent = `${sum}`;
-  labelSumIn.textContent = `${income}`;
-  labelSumOut.textContent = `${outcome}`;
-  labelSumInterest.textContent = `${interest}`;
+  labelBalance.textContent = sumDisp;
+  labelSumIn.textContent = income;
+  labelSumOut.textContent = outcome;
+  labelSumInterest.textContent = interest;
 };
 
 // Для создания юсернейма новым юзерам
