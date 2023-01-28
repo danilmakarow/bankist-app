@@ -464,9 +464,10 @@ btnLoan.addEventListener('click', function (e) {
 
     const message = `${
       activeUser.owner.split(' ')[0]
-    }, you are going to apply for a loan at ${
-      requestedLoan + activeUser.currency.sign
-    }
+    }, you are going to apply for a loan at ${Intl.NumberFormat(
+      activeUser.locale,
+      { style: 'currency', currency: activeUser.currency }
+    ).format(requestedLoan)}
     `;
 
     modalWin('conf', message, confOp);
