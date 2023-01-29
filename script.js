@@ -24,9 +24,9 @@ const clients = {
       '2022-06-28T09:15:04.904Z',
       '2022-09-08T14:11:59.604Z',
       '2022-12-01T10:17:24.185Z',
-      '2023-01-05T17:01:17.194Z',
-      '2023-01-11T23:36:17.929Z',
-      '2023-01-26T10:51:36.790Z',
+      new Date(Number(new Date()) - 360000000).toISOString(),
+      new Date(Number(new Date()) - 180000000).toISOString(),
+      new Date(Number(new Date()) - 90000000).toISOString(),
     ],
     interestRate: 1,
     pin: 1234,
@@ -276,9 +276,8 @@ btnSignGlobal.addEventListener('click', function (e) {
   const newPin = +inputSignPinGlobal.value.trim();
   const newCurr = inputLangGlobal.value.split(', ');
   const newName = inputSignUserGlobal.value.trim();
-  const newUserName = createUserNames(inputSignUserGlobal.value);
+  const newUserName = createUserNames(newName);
 
-  // eur usd uah
   if (
     newName &&
     !accounts.find(acc => acc.username === newUserName) &&
@@ -349,7 +348,7 @@ btnLogin.addEventListener('click', function (e) {
     acc => acc.username === inputLoginUsername.value.trim()
   );
 
-  if (account && account.pin === +inputLoginPin.value.trim()) {
+  if (account?.pin === +inputLoginPin.value.trim()) {
     loginSucceed(account);
   } else console.log('Login Error⛔');
   cleanInputs(inputLoginPin, inputLoginUsername);
@@ -599,6 +598,7 @@ const loginSucceed = function (acc) {
   displayMovenments(activeUser);
   calcPrintBalances(activeUser);
   highlightLastMove(1000);
+  logoutTime(true);
 
   const options = {
     hour: 'numeric',
@@ -625,6 +625,7 @@ function logout() {
   containerNav.classList.add('hidden');
   containerApp.classList.add('hidden');
   containerLogin.classList.remove('hidden--all');
+  logoutTime(false);
 }
 
 const errorBoxRemove = () =>
@@ -736,4 +737,32 @@ const createUserNames = function (name) {
     .join('')
     .toLowerCase();
   return name;
+};
+
+// Logout Timer
+let timer;
+const logoutTime = function (startCount) {
+  let countTime = new Date(300000);
+  document.querySelector('.timer').textContent = '05:00';
+  if (startCount) {
+    timer = setInterval(function () {
+      document.querySelector('.timer').textContent = Intl.DateTimeFormat(
+        'en-US',
+        {
+          minute: 'numeric',
+          second: 'numeric',
+        }
+      ).format(countTime);
+      countTime = Number(countTime) - 1000;
+      if (countTime === 0) {
+        clearInterval(timer);
+        logout();
+      }
+    }, 1000);
+  } else {
+    console.log('sup');
+    countTime = 0;
+    clearInterval(timer);
+    console.log(timer);
+  }
 };
