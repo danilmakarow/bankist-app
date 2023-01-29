@@ -362,6 +362,7 @@ logoIconNav.addEventListener('click', logout);
 //Transfers
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
+  logoutTime(true);
 
   const transferTo = accounts?.find(
     acc => acc.username === inputTransferTo.value.trim()
@@ -441,6 +442,8 @@ btnTransfer.addEventListener('click', function (e) {
 // Requesting loan
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
+  logoutTime(true);
+
   // At least 1 deposit with more than 10% of requested loan amount.
 
   const requestedLoan = +inputLoanAmount.value.trim();
@@ -495,6 +498,7 @@ btnLoan.addEventListener('click', function (e) {
 //Close account
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
+  logoutTime(true);
 
   if (
     activeUser.username === inputCloseUsername.value.trim() &&
@@ -742,9 +746,10 @@ const createUserNames = function (name) {
 // Logout Timer
 let timer;
 const logoutTime = function (startCount) {
-  let countTime = new Date(300000);
-  document.querySelector('.timer').textContent = '05:00';
+  let countTime = new Date(600000);
+  document.querySelector('.timer').textContent = '10:00';
   if (startCount) {
+    clearInterval(timer);
     timer = setInterval(function () {
       document.querySelector('.timer').textContent = Intl.DateTimeFormat(
         'en-US',
@@ -760,9 +765,7 @@ const logoutTime = function (startCount) {
       }
     }, 1000);
   } else {
-    console.log('sup');
     countTime = 0;
     clearInterval(timer);
-    console.log(timer);
   }
 };
