@@ -372,9 +372,6 @@ btnTransfer.addEventListener('click', function (e) {
     (transfer / activeUser.currencyExc) *
     transferTo?.currencyExc
   ).toFixed(2);
-
-  console.log(transfer, transferExc);
-
   if (transferTo && transfer > 0 && transfer <= activeUser.balance) {
     const confOp = function () {
       activeUser.movements.push(-transfer);
@@ -395,10 +392,7 @@ btnTransfer.addEventListener('click', function (e) {
     };
     const message = `You are going to transfer ${Intl.NumberFormat(
       activeUser.locale,
-      {
-        style: 'currency',
-        currency: activeUser.currency,
-      }
+      options
     ).format(transfer)} to ${
       transferTo.owner
     }. \n Receiver will get ${Intl.NumberFormat(transferTo.locale, {
